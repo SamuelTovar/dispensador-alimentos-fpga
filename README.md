@@ -72,50 +72,6 @@ Para mostrar la información, el módulo `LCD1602_controller` inicializa el disp
 `![Diagrama de Bloques de la Arquitectura RTL](ruta_a_tu_imagen_del_diagrama.png)`
 
 
-```mermaid
-graph TD
-    %% Definición de Entradas Externas
-    CLK((Reloj 50MHz)) --> TOP
-    RST((Reset)) --> TOP
-
-    subgraph TOP [Módulo: top_dispensador]
-        direction TB
-        
-        %% Bloques Internos
-        TECLADO[controlador_teclado]
-        RTC[controlador_rtc_ds3231]
-        RELOJ[reloj_alarma]
-        COMP{Comparador Lógico}
-        FSM[fsm_principal]
-        PWM[control_pwm]
-        B2A[bin_to_ascii]
-        LCD[LCD1602_controller]
-
-        %% Interconexiones Internas
-        TECLADO -- "sw_datos, selector, guardar" --> RELOJ
-        RELOJ -- "clk_1hz" --> FSM
-        RELOJ -- "alrm_hrs, alrm_mins" --> COMP
-        RELOJ -- "cfg_hrs, cfg_mins" --> B2A
-        
-        RTC -- "horas_bin, mins_bin" --> COMP
-        RTC -- "horas_bcd, mins_bcd (ASCII)" --> LCD
-        
-        COMP -- "alerta_hora_real" --> FSM
-        FSM -- "servo_pos (0 / 1)" --> PWM
-        B2A -- "ASCII (Alarma)" --> LCD
-    end
-
-    %% Periféricos Físicos Externos
-    TecladoFisico[/Teclado Matricial 4x4/] <--> |key_cols, key_rows| TECLADO
-    SensorI2C[/Módulo RTC DS3231/] <--> |scl, sda| RTC
-    Motor[/Servomotor/] <--- |pin_servo| PWM
-    Pantalla[/LCD 16x2/] <--- |rs, rw, e, data| LCD
-
-    %% Estilos de color
-    style TOP fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#000
-    style COMP fill:#ffeb3b,stroke:#fbc02d,color:#000
-end
-
 
 ## 6. Resultados de Implementación Física
 El sistema fue implementado exitosamente. Las siguientes imágenes evidencian el funcionamiento de cada etapa:
