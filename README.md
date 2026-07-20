@@ -131,7 +131,7 @@ graph LR
     B2A -->|Caracteres ASCII| CTRL_LCD
     CTRL_LCD -->|RS, RW, EN, Data 8-bit| LCD
 
-
+```
 ## 6. Resultados de Implementación Física
 El sistema fue implementado exitosamente. Las siguientes imágenes evidencian el funcionamiento de cada etapa:
 
