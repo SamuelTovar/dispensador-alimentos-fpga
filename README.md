@@ -38,32 +38,32 @@ Para la implementación en hardware se utilizaron los siguientes componentes:
 * **Software:** Intel Quartus Prime para la síntesis, ruteo y programación.
 
 ## 4. Arquitectura del Hardware y Módulos
-El diseño del hardware se fundamenta en un esquema jerárquico Top-Down. El módulo superior `top_dispensador` interconecta los flujos de datos entre la lectura del reloj, la interfaz de usuario y la lógica de accionamiento[cite: 8].
+El diseño del hardware se fundamenta en un esquema jerárquico Top-Down. El módulo superior `top_dispensador` interconecta los flujos de datos entre la lectura del reloj, la interfaz de usuario y la lógica de accionamiento.
 
 ### 4.1. Controlador del Reloj de Tiempo Real (I2C)
-El módulo `controlador_rtc_ds3231` establece comunicación con el sensor externo[cite: 1].
-* **Divisor de Reloj:** A partir del reloj de 50 MHz de la FPGA, se genera un tick a 400 kHz para asegurar las 4 fases necesarias del estándar I2C a 100 kHz[cite: 1].
-* **Máquina de Estados:** Una FSM de 17 estados (incluyendo START, WRITE_ADDR, ACK, READ, NACK y STOP) gestiona la lectura de los registros del RTC, obteniendo los datos de segundos, minutos y horas en formato BCD de manera síncrona[cite: 1].
+El módulo `controlador_rtc_ds3231` establece comunicación con el sensor externo.
+* **Divisor de Reloj:** A partir del reloj de 50 MHz de la FPGA, se genera un tick a 400 kHz para asegurar las 4 fases necesarias del estándar I2C a 100 kHz.
+* **Máquina de Estados:** Una FSM de 17 estados (incluyendo START, WRITE_ADDR, ACK, READ, NACK y STOP) gestiona la lectura de los registros del RTC, obteniendo los datos de segundos, minutos y horas en formato BCD de manera síncrona.
 
 ### 4.2. Escáner de Teclado y Anti-Rebote
-El ingreso de datos requiere lidiar con el ruido mecánico de los interruptores. El módulo `controlador_teclado` soluciona esto[cite: 2]:
-* Emplea un divisor de frecuencia que genera un tick cada 1 ms (50,000 ciclos de reloj)[cite: 2].
-* Una FSM realiza el escaneo continuo de las filas (cambiando los ceros lógicos) y, al detectar una interrupción en las columnas, inicia un contador de *debounce* de 10 ms para validar la pulsación[cite: 2].
-* Proporciona la emulación de un botón físico de guardado al detectar la tecla '#'[cite: 2].
+El ingreso de datos requiere lidiar con el ruido mecánico de los interruptores. El módulo `controlador_teclado` soluciona esto:
+* Emplea un divisor de frecuencia que genera un tick cada 1 ms (50,000 ciclos de reloj).
+* Una FSM realiza el escaneo continuo de las filas (cambiando los ceros lógicos) y, al detectar una interrupción en las columnas, inicia un contador de *debounce* de 10 ms para validar la pulsación.
+* Proporciona la emulación de un botón físico de guardado al detectar la tecla '#'.
 
 ### 4.3. Gestión del Tiempo y Alarma
-El módulo `reloj_alarma` se encarga de procesar la lógica de temporización[cite: 7]:
-* Un divisor de frecuencia principal reduce los 50 MHz a 1 Hz exacto (contador hasta 24,999,999) para los procesos internos[cite: 7].
-* Dispone de un comparador continuo que evalúa si la hora actual (traducida a binario) coincide con la hora configurada por el usuario; si esto ocurre, levanta la bandera `alerta_hora`[cite: 7].
+El módulo `reloj_alarma` se encarga de procesar la lógica de temporización:
+* Un divisor de frecuencia principal reduce los 50 MHz a 1 Hz exacto (contador hasta 24,999,999) para los procesos internos.
+* Dispone de un comparador continuo que evalúa si la hora actual (traducida a binario) coincide con la hora configurada por el usuario; si esto ocurre, levanta la bandera `alerta_hora`.
 
 ### 4.4. Máquina de Estados de Dispensado y PWM
 Una vez la bandera de alerta está en alto, el control pasa al actuador:
-* **FSM Principal (`fsm_principal`):** Controlada por el reloj de 1 Hz, transiciona del estado de ESPERA al estado de ABRIR. Luego, ingresa al estado PLATO, donde permanece retenida durante exactamente 4 segundos para permitir la caída del alimento, finalizando en el estado CERRAR[cite: 5].
-* **Modulación por Ancho de Pulso (`control_pwm`):** Un contador genera un período fijo de 20 ms (frecuencia de 50 Hz, estándar para servomotores). Dependiendo de la señal enviada por la FSM principal, el ancho del pulso varía entre la posición de cerrado y la de abierto (90 grados)[cite: 4].
+* **FSM Principal (`fsm_principal`):** Controlada por el reloj de 1 Hz, transiciona del estado de ESPERA al estado de ABRIR. Luego, ingresa al estado PLATO, donde permanece retenida durante exactamente 4 segundos para permitir la caída del alimento, finalizando en el estado CERRAR.
+* **Modulación por Ancho de Pulso (`control_pwm`):** Un contador genera un período fijo de 20 ms (frecuencia de 50 Hz, estándar para servomotores). Dependiendo de la señal enviada por la FSM principal, el ancho del pulso varía entre la posición de cerrado y la de abierto (90 grados).
 
 ### 4.5. Visualización de Datos (LCD 16x2)
-Para mostrar la información, el módulo `LCD1602_controller` inicializa el display a través de una FSM y memorias internas[cite: 6]. 
-* Dado que el display requiere datos en formato de texto, se emplea el módulo combinacional `bin_to_ascii`, el cual utiliza un algoritmo de restas sucesivas para convertir valores binarios (0-59) en decenas y unidades, sumando el valor hexadecimal `8'h30` para obtener el carácter ASCII correspondiente[cite: 3].
+Para mostrar la información, el módulo `LCD1602_controller` inicializa el display a través de una FSM y memorias internas. 
+* Dado que el display requiere datos en formato de texto, se emplea el módulo combinacional `bin_to_ascii`, el cual utiliza un algoritmo de restas sucesivas para convertir valores binarios (0-59) en decenas y unidades, sumando el valor hexadecimal `8'h30` para obtener el carácter ASCII correspondiente.
 
 ## 5. Diagrama de Bloques General
 > *(Instrucción: Genera un diagrama de bloques en software como draw.io, Lucidchart o Visio donde se vea el `top_dispensador` y las flechas de conexión entre el RTC, el teclado, el PWM y la LCD, y colócalo aquí).*
