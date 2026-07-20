@@ -146,7 +146,7 @@ Al coincidir los minutos y las horas, la FSM envía la señal alta al control PW
 Durante el desarrollo se presentaron diversos retos propios de la electrónica digital síncrona:
 1. **Sincronización de Dominios de Reloj:** El diseño maneja múltiples frecuencias de operación (50 MHz del sistema, 400 kHz para I2C, 1 kHz para el teclado, y 1 Hz para la FSM y el reloj interno). Se garantizó que el cruce de señales entre estos dominios no generara metaestabilidad mediante la adaptación cuidadosa de pulsos (como el guardado emulado activo en bajo desde el teclado).
 2. **Conversión de Bases Numéricas:** Se identificó que el RTC DS3231 entrega la información en formato BCD. Para poder comparar este valor con las entradas binarias del teclado, se aplicó una conversión multiplicando por 10 (desplazamiento y suma) las decenas BCD en el módulo de interconexión (top).
-3. **Manejo del Bus Bidireccional:** El protocolo I2C requirió implementar correctamente el pin SDA como *Open-Drain*. Esto se logró mediante lógica tri-estado (`assign sda = (sda_en && sda_out == 1'b0) ? 1'b0 : 1'bz;`), permitiendo tanto la escritura de comandos como la lectura de los ACKs emitidos por el esclavo sin ocasionar cortocircuitos lógicos en la FPGA[cite: 1].
+3. **Manejo del Bus Bidireccional:** El protocolo I2C requirió implementar correctamente el pin SDA como *Open-Drain*. Esto se logró mediante lógica tri-estado (`assign sda = (sda_en && sda_out == 1'b0) ? 1'b0 : 1'bz;`), permitiendo tanto la escritura de comandos como la lectura de los ACKs emitidos por el esclavo sin ocasionar cortocircuitos lógicos en la FPGA.
 
 ## 8. Conclusiones
 * Se logró implementar un sistema secuencial complejo utilizando metodologías formales de diseño digital y Verilog, comprobando su robustez funcional en hardware real.
@@ -160,7 +160,7 @@ Durante el desarrollo se presentaron diversos retos propios de la electrónica d
 A continuación, se presentan los módulos desarrollados en Verilog para la implementación del dispensador en la FPGA.
 
 ### 10.1. Módulo Top (Interconexión principal)
-Este módulo integra todos los periféricos y realiza la interconexión de las señales principales[cite: 8].
+Este módulo integra todos los periféricos y realiza la interconexión de las señales principales.
 
 <details>
 <summary><b>Ver código de top_dispensador.v</b></summary>
