@@ -73,6 +73,65 @@ Para mostrar la información, el módulo `LCD1602_controller` inicializa el disp
 
 
 
+```mermaid
+graph LR
+    %% Definición de estilos profesionales
+    classDef hardware fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    classDef internal fill:#f5f5f5,stroke:#616161,stroke-width:2px,color:#000
+    classDef logic fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    classDef output fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+
+    %% Periféricos de Entrada
+    subgraph Entradas Físicas
+        CLK[Reloj 50MHz / Reset]:::hardware
+        KEY[Teclado Matricial 4x4]:::hardware
+        RTC_EXT[Módulo RTC DS3231]:::hardware
+    end
+
+    %% Módulos Internos FPGA
+    subgraph FPGA: top_dispensador
+        CTRL_KEY[controlador_teclado]:::internal
+        CTRL_RTC[controlador_rtc_ds3231]:::internal
+        
+        ALRM[reloj_alarma]:::internal
+        COMP{Comparador de Tiempo}:::logic
+        
+        FSM[fsm_principal]:::internal
+        PWM[control_pwm]:::internal
+        
+        B2A[bin_to_ascii]:::internal
+        CTRL_LCD[LCD1602_controller]:::internal
+    end
+
+    %% Periféricos de Salida
+    subgraph Salidas Físicas
+        SERVO[Servomotor]:::output
+        LCD[Pantalla LCD 16x2]:::output
+    end
+
+    %% Conexiones de Entrada
+    CLK -->|clk_50Mhz, rst_n| CTRL_KEY & CTRL_RTC & PWM & CTRL_LCD
+    KEY <-->|Filas / Columnas| CTRL_KEY
+    RTC_EXT <-->|I2C: SDA, SCL| CTRL_RTC
+
+    %% Lógica de Alarma
+    CTRL_KEY -->|sw_datos, selector, btn| ALRM
+    CTRL_RTC -->|Hora actual BCD| COMP
+    ALRM -->|Hora alarma BIN| COMP
+
+    %% Lógica de Control del Servo
+    COMP -->|alerta_hora| FSM
+    ALRM -->|clk_1hz| FSM
+    FSM -->|servo_pos 0/1| PWM
+    PWM -->|Señal PWM| SERVO
+
+    %% Lógica de Visualización LCD
+    CTRL_RTC -->|Suma 0x30 a BCD| CTRL_LCD
+    ALRM -->|Config alarma BIN| B2A
+    B2A -->|Caracteres ASCII| CTRL_LCD
+    CTRL_LCD -->|RS, RW, EN, Data 8-bit| LCD
+
+
 ## 6. Resultados de Implementación Física
 El sistema fue implementado exitosamente. Las siguientes imágenes evidencian el funcionamiento de cada etapa:
 
