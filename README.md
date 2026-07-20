@@ -8,6 +8,19 @@
 
 ---
 
+## 📂 Archivos del Proyecto
+
+A continuación, se listan los archivos físicos que componen este diseño y que se encuentran subidos en este repositorio:
+
+* `top_dispensador.v` - Módulo principal (Top-Level) que interconecta y coordina todos los subsistemas del dispensador.
+* `controlador_rtc_ds3231.v` - Controlador I2C para extraer la hora y comunicación con el sensor DS3231.
+* `controlador_teclado.v` - Controlador y escáner para leer las entradas del teclado matricial y emular los botones.
+* `reloj_alarma.v` - Módulo encargado de gestionar el reloj en tiempo real, el divisor de frecuencia y la lógica para guardar la alarma.
+* `fsm_principal.v` - Máquina de estados finitos que controla los tiempos de espera y el ciclo de apertura/cierre del dispensador.
+* `control_pwm.v` - Generador de señales PWM con los anchos de pulso necesarios para posicionar el servomotor.
+* `LCD1602_controller.v` - Controlador y máquina de estados para visualizar los textos y tiempos en la pantalla LCD 16x2.
+* `bin_to_ascii.v` - Decodificador combinacional para convertir los valores numéricos binarios del reloj a caracteres ASCII legibles para la pantalla.
+
 ## 1. Resumen
 El presente documento detalla el diseño, simulación y montaje en hardware de un sistema dispensador de alimentos automatizado y programable. El sistema está centralizado en una FPGA y emplea descripción de hardware en Verilog. El proyecto integra múltiples periféricos, incluyendo un Reloj de Tiempo Real (RTC DS3231) mediante protocolo I2C, un teclado matricial 4x4 para el ingreso de la configuración, una pantalla LCD 16x2 para la interfaz de usuario, y un servomotor controlado por PWM para el accionamiento mecánico del dispensador.
 
