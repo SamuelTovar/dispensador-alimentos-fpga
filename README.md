@@ -67,11 +67,6 @@ Para mostrar la información, el módulo `LCD1602_controller` inicializa el disp
 * Dado que el display requiere datos en formato de texto, se emplea el módulo combinacional `bin_to_ascii`, el cual utiliza un algoritmo de restas sucesivas para convertir valores binarios (0-59) en decenas y unidades, sumando el valor hexadecimal `8'h30` para obtener el carácter ASCII correspondiente.
 
 ## 5. Diagrama de Bloques General
-> *(Instrucción: Genera un diagrama de bloques en software como draw.io, Lucidchart o Visio donde se vea el `top_dispensador` y las flechas de conexión entre el RTC, el teclado, el PWM y la LCD, y colócalo aquí).*
-  
-`![Diagrama de Bloques de la Arquitectura RTL](ruta_a_tu_imagen_del_diagrama.png)`
-
-
 
 ```mermaid
 graph LR
