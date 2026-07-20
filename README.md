@@ -20,8 +20,8 @@ Para la implementación en hardware se utilizaron los siguientes componentes:
 * **Módulo RTC DS3231:** Sensor de tiempo real con comunicación I2C.
 * **Teclado Matricial 4x4:** Teclado de membrana para el ingreso de datos de la alarma.
 * **Pantalla LCD 16x2:** Interfaz visual configurada para modo de 8 bits.
-* **Servomotor (ej. SG90 o MG995):** Actuador físico para la compuerta del dispensador.
-* **Cables Jumper y Protoboard:** Para el enrutamiento de señales entre los periféricos y los puertos GPIO de la FPGA.
+* **Servomotor :** Actuador físico para la compuerta del dispensador.
+* **Cables Jumper :** Para el enrutamiento de señales entre los periféricos y los puertos GPIO de la FPGA.
 * **Software:** Intel Quartus Prime para la síntesis, ruteo y programación.
 
 ## 4. Arquitectura del Hardware y Módulos
