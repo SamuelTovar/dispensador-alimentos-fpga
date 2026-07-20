@@ -3,7 +3,7 @@
 **Universidad Nacional de Colombia – Sede Bogotá**  
 **Facultad de Ingeniería**  
 **Curso:** Electrónica Digital I  
-**Autor:** Samuel Tovar Vásquez  
+**Autor:** Samuel Tovar Vásquez y Lady Lorena Cardenas Poveda
 **Fecha:** Julio de 2026
 
 ---
