@@ -136,11 +136,13 @@ El sistema fue implementado exitosamente. Las siguientes imágenes evidencian el
 
 ### 6.2. Interfaz en Pantalla
 Se verifica la correcta conversión de los valores BCD del reloj a ASCII en la primera línea de la pantalla, y la actualización en tiempo real de la configuración de la alarma al presionar el teclado matricial en la segunda línea.
-`![Pantalla LCD mostrando la hora y alarma](ruta_a_tu_foto_lcd.jpg)`
+<img width="590" height="1280" alt="image" src="https://github.com/user-attachments/assets/ce30064e-7640-442c-a96e-1319279a1c6f" />
+
 
 ### 6.3. Accionamiento Mecánico
 Al coincidir los minutos y las horas, la FSM envía la señal alta al control PWM, posicionando el servomotor en el ángulo de apertura durante los 4 segundos estipulados.
-`![Servomotor en posición abierta](ruta_a_tu_foto_servo.jpg)`
+<img width="590" height="1280" alt="image" src="https://github.com/user-attachments/assets/cd27ec73-ef36-4375-8708-8db4348407db" />
+
 
 ## 7. Análisis de Resultados y Retos Técnicos
 Durante el desarrollo se presentaron diversos retos propios de la electrónica digital síncrona:
